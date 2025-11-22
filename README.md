@@ -2,144 +2,138 @@
 ### Multi-Tier, Highly Available & Highly Scalable Architecture on AWS
 
 This project demonstrates how to design and deploy a **production-grade multi-tier architecture** on AWS.  
-It includes a VPC, public/private subnets, load balancer, Auto Scaling Group, RDS, S3, CloudFront, IAM, SSM and security best practices.
+It includes a VPC, public/private subnets, load balancer, Auto Scaling Group, RDS, S3, CloudFront, IAM, SSM and follows real AWS best practices.
 
 ---
 
-# 📌 Architecture Overview
+# 🏗️ Architecture Diagram & Setup Screenshots
 
-The goal was to create a **secure, scalable, fault-tolerant** AWS environment:
+## **1️⃣ VPC & Subnets**
 
-- **VPC with 2 AZs**  
-- **Public Subnets** → ALB, NAT Gateway  
-- **Private Subnets** → EC2 Web Tier + RDS MySQL  
-- **Auto Scaling Group** with Launch Template  
-- **Application Load Balancer** for web traffic  
-- **S3 bucket** for static content  
-- **CloudFront CDN** for low-latency delivery  
-- **Systems Manager (SSM)** for EC2 access (no SSH)  
-- **CloudWatch** for monitoring and scaling  
+### VPC
+![VPC](screenshots/screenshot_page1_Image9.png)
+
+### Subnets
+![Subnets](screenshots/screenshot_page1_Image10.png)
 
 ---
 
-# 📁 AWS Resources (with Screenshots)
+## **2️⃣ Internet Gateway & Route Tables**
 
-### **1️⃣ VPC & Subnets**
-| Component | Screenshot |
-|----------|------------|
-| VPC List | ![VPC](screenshots/vpc.png) |
-| Subnets | ![Subnets](screenshots/subnets.png) |
+### Internet Gateway
+![IGW](screenshots/screenshot_page2_Image13.png)
 
----
-
-### **2️⃣ Internet Gateway & Route Tables**
-| IGW | Route Table |
-|-----|-------------|
-| ![IGW](screenshots/igw.png) | ![Route Table](screenshots/public-rt.png) |
+### Public Route Table
+![Public RT](screenshots/screenshot_page2_Image14.png)
 
 ---
 
-### **3️⃣ NAT Gateway & Private Route Table**
-| NAT Gateway | Private RT |
-|-------------|------------|
-| ![NAT](screenshots/nat-gw.png) | ![Private RT](screenshots/private-rt.png) |
+## **3️⃣ NAT Gateway & Private Route Table**
+
+### NAT Gateway  
+![NAT](screenshots/screenshot_page3_Image17.png)
+
+### Private Route Table  
+![Private RT](screenshots/screenshot_page3_Image18.png)
 
 ---
 
-### **4️⃣ Security Groups & EC2 Instances**
-| Security Groups | EC2 Instances |
-|-----------------|---------------|
-| ![SG](screenshots/security-groups.png) | ![Instances](screenshots/ec2.png) |
+## **4️⃣ Security Groups & EC2 Instances**
+
+### Security Groups  
+![Security Groups](screenshots/screenshot_page4_Image21.png)
+
+### EC2 Instances  
+![EC2 Instances](screenshots/screenshot_page4_Image22.png)
 
 ---
 
-### **5️⃣ Systems Manager (SSM) Access**
-| Fleet Manager | SSM IAM Role |
-|---------------|--------------|
-| ![Fleet](screenshots/fleet-manager.png) | ![SSM Role](screenshots/ssm-role.png) |
+## **5️⃣ Systems Manager (SSM) Access**
+
+### Fleet Manager / SSM  
+![SSM](screenshots/screenshot_page5_Image25.png)
+
+### SSM Role  
+![SSM Role](screenshots/screenshot_page5_Image26.png)
 
 ---
 
-### **6️⃣ Target Group & Launch Template**
-| Target Group | Launch Template |
-|--------------|-----------------|
-| ![TG](screenshots/target-group.png) | ![LT](screenshots/launch-template.png) |
+## **6️⃣ Target Group & Launch Template**
+
+### Target Group  
+![Target Group](screenshots/screenshot_page6_Image29.png)
+
+### Launch Template  
+![Launch Template](screenshots/screenshot_page6_Image30.png)
 
 ---
 
-### **7️⃣ Auto Scaling Group**
-| ASG Overview | ASG Activity |
-|--------------|--------------|
-| ![ASG](screenshots/asg.png) | ![ASG Activity](screenshots/asg-activity.png) |
+## **7️⃣ Auto Scaling Group (ASG)**
+
+### ASG  
+![ASG](screenshots/screenshot_page7_Image33.png)
+
+### ASG Activity  
+![ASG Activity](screenshots/screenshot_page7_Image34.png)
 
 ---
 
-### **8️⃣ CloudFront CDN**
-| CloudFront Distribution |
-|-------------------------|
-| ![CloudFront](screenshots/cloudfront.png) |
+## **8️⃣ CloudFront CDN**
+
+### CloudFront Distribution  
+![CloudFront](screenshots/screenshot_page8_Image37.png)
+
+### CloudFront Settings  
+![CloudFront Settings](screenshots/screenshot_page8_Image38.png)
 
 ---
 
-# 🏗️ Project Summary
+# 📌 Project Summary
 
-### **✔️ VPC Design**
-- CIDR: `10.0.0.0/16`
-- **Public Subnets:** For ALB and NAT  
+### ✔️ VPC Design
+- CIDR: 10.0.0.0/16  
+- **Public Subnets:** For ALB + NAT  
 - **Private Subnets:** For EC2 + RDS  
-- Route Tables:  
-  - Public RT → IGW  
-  - Private RT → NAT Gateway  
-
-### **✔️ Web Tier**
-- EC2 Amazon Linux 2023
-- Auto Scaling Group (Min 2, Max 4)
-- Launch Template with User Data
-- Application code served on NGINX
-
-### **✔️ Load Balancer**
-- Application Load Balancer  
-- Health checks on port 80  
-- Forwarding to Target Group (EC2 instances)
-
-### **✔️ Database Tier**
-- Amazon RDS MySQL  
-- Private subnet only  
-- Security Group allows DB access **only** from WebApp-SG  
-
-### **✔️ Storage + CDN**
-- S3 bucket for images  
-- CloudFront for low-latency global delivery  
-- Bucket locked down using **OAC**  
-
-### **✔️ Security**
-- No SSH access  
-- EC2 access via **Systems Manager**  
-- SGs follow least-privilege  
-- Private subnets for compute + DB  
-
-### **✔️ Monitoring**
-- CloudWatch CPU alarms  
-- ASG scaling policies  
-- CloudWatch logs for EC2  
+- Public RT → IGW  
+- Private RT → NAT  
 
 ---
 
-# 🚀 How to Run This Project
+### ✔️ Web Tier
+- EC2 Amazon Linux 2023  
+- ALB forwards traffic to EC2  
+- Auto Scaling based on CPU  
+- Launch Template for consistency  
+- NGINX configured  
 
-1. Create VPC in 2 AZs  
-2. Create public and private subnets  
-3. Attach Internet Gateway  
-4. Create Public & Private Route Tables  
-5. Create NAT Gateway  
-6. Launch EC2 in private subnets  
-7. Attach IAM role for SSM  
-8. Configure ALB + Target Group  
-9. Create Launch Template  
-10. Create Auto Scaling Group  
-11. Create RDS in private subnets  
-12. Create S3 bucket  
-13. Create CloudFront Distribution (OAC recommended)  
+---
+
+### ✔️ Database Tier
+- Amazon RDS MySQL  
+- Hosted in private subnets  
+- Accessible ONLY from WebApp SG  
+
+---
+
+### ✔️ Static Storage + CDN
+- S3 bucket for images  
+- CloudFront distribution for global low-latency  
+- OAC configured to secure bucket  
+
+---
+
+### ✔️ Security
+- No SSH access  
+- Access through SSM only  
+- SG follows least privilege  
+- DB not exposed to internet  
+
+---
+
+### ✔️ Monitoring
+- CloudWatch CPU alarms  
+- Auto Scaling events  
+- ALB health checks  
 
 ---
 
