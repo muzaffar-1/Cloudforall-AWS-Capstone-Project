@@ -8,6 +8,9 @@ It includes a VPC, public/private subnets, load balancer, Auto Scaling Group, RD
 
 # 🏗️ Architecture Diagram & Setup Screenshots
 
+<img width="819" height="534" alt="image" src="https://github.com/user-attachments/assets/11760d1e-e077-4723-9a84-6d8a3c0c4d71" />
+
+
 ## **1️⃣ VPC & Subnets**
 
 ### VPC
